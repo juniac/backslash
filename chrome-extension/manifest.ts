@@ -31,18 +31,18 @@ const manifest = {
   description: '__MSG_extensionDescription__',
   host_permissions: ['<all_urls>'],
   permissions: ['storage', 'scripting', 'tabs', 'notifications', 'sidePanel'],
-  options_page: 'options/index.html',
-  background: {
-    service_worker: 'background.js',
-    type: 'module',
-  },
-  action: {
-    default_popup: 'popup/index.html',
-    default_icon: 'icon-34.png',
-  },
-  chrome_url_overrides: {
-    newtab: 'new-tab/index.html',
-  },
+  // options_page: 'options/index.html',
+  // background: {
+  //   service_worker: 'background.js',
+  //   type: 'module',
+  // },
+  // action: {
+  //   default_popup: 'popup/index.html',
+  //   default_icon: 'icon-34.png',
+  // },
+  // chrome_url_overrides: {
+  //   newtab: 'new-tab/index.html',
+  // },
   icons: {
     128: 'icon-128.png',
   },
@@ -67,9 +67,9 @@ const manifest = {
       matches: ['*://*/*'],
     },
   ],
-  side_panel: {
-    default_path: 'side-panel/index.html',
-  },
+  // side_panel: {
+  //   default_path: 'side-panel/index.html',
+  // },
 } satisfies chrome.runtime.ManifestV3;
 
 export default manifest;
