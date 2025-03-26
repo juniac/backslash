@@ -1,4 +1,5 @@
 import { activateSlashKeyOnCoupang } from '@src/coupang';
+import { activateKeywordTrackerOnSoccerline } from '@src/tracker';
 // import { sampleFunction } from '@src/sampleFunction';
 
 // console.log('content script loaded!!!212312312123');
@@ -7,10 +8,16 @@ import { activateSlashKeyOnCoupang } from '@src/coupang';
 // sampleFunction();
 
 function main() {
+  console.log('content script loaded');
   const host = window.location.host;
-  console.log(host);
+  // const search = window.location.search;
+
   if (host === 'www.coupang.com') {
     activateSlashKeyOnCoupang();
+  }
+  if (host === 'soccerline.kr') {
+    // console.log(pathname);
+    activateKeywordTrackerOnSoccerline();
   }
 }
 

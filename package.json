@@ -39,6 +39,10 @@
     "module-manager": "pnpm -F module-manager start"
   },
   "dependencies": {
+    "@clerk/chrome-extension": "^2.2.21",
+    "@types/lodash": "^4.17.16",
+    "firebase": "^11.5.0",
+    "lodash": "^4.17.21",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
