@@ -1,10 +1,12 @@
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
 
+import { AddMemoButton } from "~features/add-memo-button"
 import { CountButton } from "~features/count-button"
 
 export const config: PlasmoCSConfig = {
-  matches: ["<all_urls>"]
+  // matches: ["<all_urls>"]
+  matches: ["https://soccerline.kr/*"]
 }
 
 /**
@@ -22,7 +24,7 @@ export const config: PlasmoCSConfig = {
 export const getStyle = (): HTMLStyleElement => {
   const baseFontSize = 16
 
-  let updatedCssText = cssText.replaceAll(":root", ":host(plasmo-csui)")
+  let updatedCssText = cssText.replaceAll(":root", ":host(csui)")
   const remRegex = /([\d.]+)rem/g
   updatedCssText = updatedCssText.replace(remRegex, (match, remValue) => {
     const pixelsValue = parseFloat(remValue) * baseFontSize
@@ -36,11 +38,15 @@ export const getStyle = (): HTMLStyleElement => {
 
   return styleElement
 }
+const onClickAddButton = () => {
+  console.log("Add Memo Button clicked!!")
+  // Add your logic here
+}
 
 const PlasmoOverlay = () => {
   return (
-    <div className="plasmo-z-50 plasmo-flex plasmo-fixed plasmo-top-32 plasmo-right-8">
-      <CountButton />
+    <div className="z-50 flex fixed top-32 right-8">
+      <AddMemoButton handler={onClickAddButton} />
     </div>
   )
 }
