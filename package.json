@@ -52,11 +52,9 @@
     "typescript": "5.3.3"
   },
   "manifest": {
-    "key": "$CRX_PUBLIC_KEY",
     "host_permissions": [
       "https://*/*",
-      "http://localhost/*",
-      "$CLERK_FRONTEND_API/*"
+      "http://localhost/*"
     ],
     "permissions": [
       "cookies",
