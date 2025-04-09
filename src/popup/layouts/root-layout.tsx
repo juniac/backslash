@@ -1,60 +1,52 @@
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from "@clerk/chrome-extension"
-import { koKR } from "@clerk/localizations"
-import { Link, Outlet, useNavigate } from "react-router"
+import { Link, Outlet } from "react-router"
 
-import { Button } from "~components/ui/button"
-
-const PUBLISHABLE_KEY = process.env.PLASMO_PUBLIC_CLERK_PUBLISHABLE_KEY
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error(
-    "Please add the PLASMO_PUBLIC_CLERK_PUBLISHABLE_KEY to the .env.development file"
-  )
-}
+import { Button, buttonVariants } from "~components/ui/button"
+import useFirebaseUser from "~firebase/useFirebaseUser"
+import { cn } from "~lib/utils"
 
 export const RootLayout = () => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
+  const { isLoading, user, onLogout } = useFirebaseUser()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
-    <ClerkProvider
-      // routerPush={(to) => navigate(to)}
-      // routerReplace={(to) => navigate(to, { replace: true })}
-      publishableKey={PUBLISHABLE_KEY}
-      // afterSignOutUrl="/"
-      localization={koKR}>
-      <div className="w-[800px] h-[1200px]">
-        <main className="p-5 flex items-center justify-center  flex-col">
+    <div className="w-full max-h-full">
+      <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
+        <div className="mx-4 sm:mx-8 flex h-14 items-center">
+          <div className="flex items-center space-x-4 lg:space-x-0">
+            <Link to="/" className="flex items-center space-x-2">
+              <h1 className="font-bold text-xl">backslash</h1>
+            </Link>
+          </div>
+          <div className="flex flex-1 items-center justify-end">
+            {user ? (
+              <Button
+                onClick={onLogout}
+                variant="outline"
+                className="right-4 top-4 md:right-8 md:top-8">
+                로그아웃
+              </Button>
+            ) : (
+              <Link
+                to="/sign-in"
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "right-4 top-4 md:right-8 md:top-8"
+                )}>
+                로그인
+              </Link>
+            )}
+          </div>
+        </div>
+      </header>
+      <div className="w-full  max-h-full">
+        <div className="p-4 rounded-xl bg-white text-black">
           <Outlet />
-        </main>
-        <footer>
-          <SignedIn>
-            <div className="flex items-center justify-center gap-2">
-              <Button asChild type="button">
-                <Link to="/settings">Settings</Link>
-              </Button>
-              <UserButton />
-            </div>
-          </SignedIn>
-          <SignedOut>
-            <div className="flex items-center justify-center gap-2">
-              <Button asChild type="button">
-                <Link to="/">Home</Link>
-              </Button>
-              <Button asChild type="button">
-                <Link to="/sign-in">Sign In</Link>
-              </Button>
-              <Button asChild type="button">
-                <Link to="/sign-up">Sign Up</Link>
-              </Button>
-            </div>
-          </SignedOut>
-        </footer>
+        </div>
       </div>
-    </ClerkProvider>
+    </div>
   )
 }

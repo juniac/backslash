@@ -8,9 +8,7 @@ import { activateKeywordTrackerOnSoccerline } from "~content/tracker"
 // }
 
 export {}
-console.log(
-  "You may find that having is not so pleasing a thing as wanting. This is not logical, but it is often true."
-)
+console.log("PLASMO content script")
 function main() {
   console.log("content script loaded")
   const host = window.location.host

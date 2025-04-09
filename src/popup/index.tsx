@@ -14,8 +14,8 @@ import { createMemoryRouter, RouterProvider } from "react-router"
 import { RootLayout } from "./layouts/root-layout"
 import { Home } from "./routes/home"
 import { Settings } from "./routes/settings"
-import { SignInPage } from "./routes/sign-in"
-import { SignUpPage } from "./routes/sign-up"
+import { SignIn } from "./routes/sign-in"
+import { SignUp } from "./routes/sign-up"
 
 const router = createMemoryRouter([
   {
@@ -24,8 +24,8 @@ const router = createMemoryRouter([
     // Mounted where the <Outlet /> component is inside the root layout
     children: [
       { path: "/", element: <Home /> },
-      { path: "/sign-in", element: <SignInPage /> },
-      { path: "/sign-up", element: <SignUpPage /> },
+      { path: "/sign-in", element: <SignIn /> },
+      { path: "/sign-up", element: <SignUp /> },
       { path: "/settings", element: <Settings /> }
     ]
   }

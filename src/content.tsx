@@ -1,8 +1,12 @@
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
+import React from "react"
+
+import { sendToBackground } from "@plasmohq/messaging"
 
 import { AddMemoButton } from "~features/add-memo-button"
-import { CountButton } from "~features/count-button"
+
+// import { CountButton } from "~features/count-button"
 
 export const config: PlasmoCSConfig = {
   // matches: ["<all_urls>"]
@@ -38,12 +42,27 @@ export const getStyle = (): HTMLStyleElement => {
 
   return styleElement
 }
-const onClickAddButton = () => {
+const onClickAddButton = async () => {
   console.log("Add Memo Button clicked!!")
+  if (window.getSelection && window.getSelection().type === "Range") {
+    const selectedText = window.getSelection().toString()
+    const host = window.location.host
+    console.log("string", selectedText)
+    await sendToBackground({
+      name: "saveKeyword",
+      body: {
+        host: host,
+        keyword: selectedText,
+        memo: "test memo"
+      }
+    })
+  }
+
   // Add your logic here
 }
 
 const PlasmoOverlay = () => {
+  console.log("PlasmoOverlay loaded")
   return (
     <div className="z-50 flex fixed top-32 right-8">
       <AddMemoButton handler={onClickAddButton} />
