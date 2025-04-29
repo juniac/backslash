@@ -1,3 +1,5 @@
+import { auth } from "~firebase/firebaseClient"
+
 // chrome.scripting.executeScript(
 //   {
 //     target: {
@@ -10,3 +12,10 @@
 //     console.log("Background script got callback after injection")
 //   }
 // )
+
+export {}
+
+// console.log("background index", auth.currentUser)
+// auth.onAuthStateChanged((user) => {
+//   console.log("background script onAuthStateChanged user", user)
+// })

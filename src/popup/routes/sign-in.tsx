@@ -38,39 +38,48 @@ type signUpFormType = z.infer<typeof formSchema>
 
 export const SignIn = () => {
   const navigate = useNavigate()
-  const { isLoading, onLogin } = useFirebaseUser()
+  const { isLoading, loginAction } = useFirebaseUser()
   const [isSigningIn, setIsSigningIn] = useState<boolean>(false)
 
   const form = useForm<signUpFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      email: "juniac@naver.com",
       password: ""
     }
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSigningIn(true)
-    console.log("onSubmit", values)
     const { email, password } = values
-    if (!email || !password)
-      return console.log("Please enter email and password")
 
+    if (!email || !password) {
+      return console.log("Please enter email and password")
+    }
     // e.preventDefault()
-    try {
-      const signInResult = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      )
+
+    const result = await loginAction(values)
+    console.log("background message login result", result)
+    if (result) {
       setIsSigningIn(false)
-      console.log("signInResult", signInResult)
-    } catch (error: any) {
-      console.log(error.message)
-    } finally {
-      onLogin()
       navigate("/")
     }
+
+    // try {
+    //   const signInResult = await signInWithEmailAndPassword(
+    //     auth,
+    //     email,
+    //     password
+    //   )
+
+    //   setIsSigningIn(false)
+    //   console.log("signInResult", signInResult)
+    // } catch (error: any) {
+    //   console.log("signInError", error.message)
+    // } finally {
+    //   loginAction(values)
+    //   navigate("/")
+    // }
     // setIsSigningIn(LoginProvider.EMAIL)
     // const result = await signIn(values)
     // if (result.success === false && result.error) {

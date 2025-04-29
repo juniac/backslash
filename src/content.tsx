@@ -11,6 +11,7 @@ import { AddMemoButton } from "~features/add-memo-button"
 export const config: PlasmoCSConfig = {
   // matches: ["<all_urls>"]
   matches: ["https://soccerline.kr/*"]
+
 }
 
 /**
@@ -44,6 +45,7 @@ export const getStyle = (): HTMLStyleElement => {
 }
 const onClickAddButton = async () => {
   console.log("Add Memo Button clicked!!")
+
   if (window.getSelection && window.getSelection().type === "Range") {
     const selectedText = window.getSelection().toString()
     const host = window.location.host
