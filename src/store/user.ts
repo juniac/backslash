@@ -1,12 +1,23 @@
 // 기본 사용 예시
-import _ from "lodash"
+// import _ from "lodash"
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
 
-interface User {
+// import { persist } from "zustand/middleware"
+
+interface UserStore {
   user: any
   setUser: (user) => void
 }
+const useUserStore = create<UserStore>((set) => ({
+  user: null,
+  setUser: (user) => set({ user })
+}))
+
+export { useUserStore }
+// export const getUserStore = () => useStore((state) => state.user)
+// export const setUserStore = (user) => useStore.getState().setUser(user)
+
+/*
 
 // 크롬 스토리지를 위한 커스텀 스토리지
 const chromeStorage = {
@@ -27,7 +38,7 @@ const useStore = create(
     (set, get) => ({
       user: null,
       setUser: (user) => {
-        console.log("유저 상태 변경:", user)
+        // console.log("유저 상태 변경:", user)
         set({ user })
       }
     }),
@@ -38,13 +49,9 @@ const useStore = create(
       skipHydration: true,
       version: 1,
       onRehydrateStorage: (state) => {
-        console.log("hydration starts")
+        // console.log("hydration starts")
         return (state, error) => {
-          if (error) {
-            console.log("hydration error", error)
-          } else {
-            console.log("hydration finished")
-          }
+          console.log("hydration error", error)
         }
       }
     }
@@ -56,14 +63,16 @@ export const setUserStore = (user) => useStore.getState().setUser(user)
 
 // 초기 hydration을 수동으로 트리거
 chrome.storage.local.get("user-storage").then((result) => {
-  console.log("hydrate result", result)
+  // console.log("hydrate result", result)
   if (_.has(result, "user-storage")) {
     try {
       const state = JSON.parse(result["user-storage"])
-      console.log("hydrate state", state)
+      // console.log("hydrate state", state)
       useStore.setState(state)
     } catch (e) {
-      console.error("Failed to hydrate state:", e)
+      // console.error("Failed to hydrate state:", e)
     }
   }
 })
+
+*/

@@ -1,7 +1,7 @@
 // src/firebase/firebaseClient.ts
 
 import { getApps, initializeApp } from "firebase/app"
-import { getAuth, GoogleAuthProvider } from "firebase/auth"
+import { getAuth, GoogleAuthProvider } from "firebase/auth/web-extension"
 import { getFirestore } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
 

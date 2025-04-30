@@ -1,22 +1,26 @@
 import {
-  browserLocalPersistence,
+  getAuth,
+  // browserLocalPersistence,
   onAuthStateChanged,
-  setPersistence,
-  type User
-} from "firebase/auth"
+  setPersistence
+  // type User
+} from "firebase/auth/web-extension"
 import { useEffect, useState } from "react"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
-import { getUserStore, setUserStore } from "~store/user"
+import { firebase_app } from "~background"
+import { useUserStore } from "~store/user"
 
-import { auth } from "./firebaseClient"
-
-setPersistence(auth, browserLocalPersistence)
+// import { auth } from "./firebaseClient"
+// setPersistence(auth, browserLocalPersistence)
 
 export default function useFirebaseUser() {
   const [isLoading, setIsLoading] = useState(false)
-  const user = getUserStore()
+  const { user, setUser } = useUserStore()
+
+  const auth = getAuth(firebase_app)
+  // const user = getUserStore()
 
   const getUser = async () => {
     setIsLoading(true)
@@ -25,11 +29,16 @@ export default function useFirebaseUser() {
       body: {}
     })
     setIsLoading(false)
-    // setUserStore(result.user)
-    return result.user
+    if (result.user) {
+      setUser(result.user)
+    } else {
+      setUser(null)
+    }
+    return result
   }
 
   const logoutAction = async () => {
+    console.log("logoutAction")
     setIsLoading(true)
     if (user) {
       await auth.signOut()
@@ -40,7 +49,7 @@ export default function useFirebaseUser() {
       })
     }
     setIsLoading(false)
-    setUserStore(null)
+    setUser(null)
   }
 
   const loginAction = async (values) => {
@@ -53,10 +62,13 @@ export default function useFirebaseUser() {
       }
     })
     if (result.status === "success" || result.user) {
-      console.log("loginAction result", result)
-      setUserStore(result.user)
+      // console.log("loginAction result", result)
+      // setUser(result.user)
       setIsLoading(false)
+      setUser(result.user)
       return result.user
+    } else {
+      setUser(null)
     }
     setIsLoading(false)
     return null

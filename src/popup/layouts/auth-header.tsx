@@ -1,23 +1,27 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Link, Outlet } from "react-router"
 
 import { Button, buttonVariants } from "~components/ui/button"
 import useFirebaseUser from "~firebase/useFirebaseUser"
 import { cn } from "~lib/utils"
+import { useUserStore } from "~store/user"
 
-export const AuthHeader = () => {
+export const AuthHeader = ({ updated }) => {
   // const navigate = useNavigate()
-  const { isLoading, user, logoutAction, getUser } = useFirebaseUser()
+  // const [user, setUser] = useState(null)
+  const { isLoading, logoutAction } = useFirebaseUser()
+  const { user } = useUserStore()
 
-  console.log("header-> authuser", user)
+  // console.log("🚀 ~ AuthHeader ~ user:", user)
 
   useEffect(() => {
-    getUser()
-    // onAuthStateChanged(auth, (user) => {
-    //   setIsLoading(false)
-    //   setUser(user)
-    // })
-  }, [])
+    // console.log("🚀 ~ AuthHeader ~ isLoading:", isLoading)
+    // if (isLoading === false) {
+    // const { userBstoredUser = useUserStore()
+    // setUser(storedUser)
+    // console.log("🚀 ~ AuthHeader ~ storedUser:", storedUser)
+    // }
+  }, [updated])
 
   if (isLoading) {
     return <div>Loading...</div>

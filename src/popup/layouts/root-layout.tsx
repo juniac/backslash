@@ -1,8 +1,15 @@
-import { Link, Outlet } from "react-router"
+import { useEffect, useState } from "react"
+import { Link, Outlet, useLocation } from "react-router"
 
 import { AuthHeader } from "./auth-header"
 
 export const RootLayout = () => {
+  const [updated, setUpdated] = useState(0)
+  const location = useLocation()
+  useEffect(() => {
+    setUpdated((state) => state + 1)
+    //route change detected. do something here
+  }, [location])
   return (
     <div className="w-full max-h-full">
       <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
@@ -12,7 +19,7 @@ export const RootLayout = () => {
               <h1 className="font-bold text-xl">backslash</h1>
             </Link>
           </div>
-          <AuthHeader />
+          <AuthHeader updated={updated} />
         </div>
       </header>
       <div className="w-full max-h-full">

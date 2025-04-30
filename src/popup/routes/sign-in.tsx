@@ -1,6 +1,5 @@
 // import { createRedirectUrl, useQueryString } from "@hooks/use-queryString";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signInWithEmailAndPassword } from "firebase/auth"
 import { LoaderCircle, UserRoundPlus } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -21,7 +20,6 @@ import {
 } from "~components/ui/form"
 import { Input } from "~components/ui/input"
 import { Label } from "~components/ui/label"
-import { auth } from "~firebase/firebaseClient"
 import useFirebaseUser from "~firebase/useFirebaseUser"
 import { cn } from "~lib/utils"
 import { AuthLayout } from "~popup/layouts/auth-layout"
@@ -58,11 +56,13 @@ export const SignIn = () => {
     }
     // e.preventDefault()
 
-    const result = await loginAction(values)
-    console.log("background message login result", result)
-    if (result) {
+    const authResult = await loginAction(values)
+    // console.log("background message login result", authResult)
+    if (authResult) {
       setIsSigningIn(false)
       navigate("/")
+    } else {
+      setIsSigningIn(false)
     }
 
     // try {
