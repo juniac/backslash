@@ -12,17 +12,6 @@ export const AuthHeader = ({ updated }) => {
   const { isLoading, logoutAction } = useFirebaseUser()
   const { user } = useUserStore()
 
-  // console.log("🚀 ~ AuthHeader ~ user:", user)
-
-  useEffect(() => {
-    // console.log("🚀 ~ AuthHeader ~ isLoading:", isLoading)
-    // if (isLoading === false) {
-    // const { userBstoredUser = useUserStore()
-    // setUser(storedUser)
-    // console.log("🚀 ~ AuthHeader ~ storedUser:", storedUser)
-    // }
-  }, [updated])
-
   if (isLoading) {
     return <div>Loading...</div>
   }

@@ -12,6 +12,9 @@
 // )
 
 import { getApps, initializeApp } from "firebase/app"
+import { getAuth, GoogleAuthProvider } from "firebase/auth/web-extension"
+import { getFirestore } from "firebase/firestore"
+import { getStorage } from "firebase/storage"
 
 const clientCredentials = {
   apiKey: process.env.PLASMO_PUBLIC_FIREBASE_PUBLIC_API_KEY,
@@ -31,6 +34,11 @@ if (!getApps().length) {
 } else {
   firebase_app = getApps()[0]
 }
+
+export const storage = getStorage(firebase_app)
+export const auth = getAuth(firebase_app)
+export const db = getFirestore(firebase_app)
+export const googleAuth = new GoogleAuthProvider()
 
 export { firebase_app }
 
