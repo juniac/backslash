@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 html {
-  width: 800px;
-  height: 600px;
+  width: 400px;
+  height: 500px;
 }
 
 #shadow-container {

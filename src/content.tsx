@@ -11,7 +11,6 @@ import { AddMemoButton } from "~features/add-memo-button"
 export const config: PlasmoCSConfig = {
   // matches: ["<all_urls>"]
   matches: ["https://soccerline.kr/*"]
-
 }
 
 /**

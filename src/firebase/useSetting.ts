@@ -1,4 +1,4 @@
-import { doc, setDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc } from "firebase/firestore"
 import { useState } from "react"
 
 import { sendToBackground } from "@plasmohq/messaging"
@@ -21,7 +21,17 @@ export default function useSettings() {
 
   const getSetting = async () => {
     setIsLoading(true)
-
+    if (user && user.uid) {
+      // const result = { result: "success" }
+      const docSnapshot = await getDoc(doc(db, "settings", user.uid))
+      if (docSnapshot.exists()) {
+        setIsLoading(false)
+        const result = docSnapshot.data()
+        return result
+      }
+    }
+    setIsLoading(false)
+    return null
     // const result = await sendToBackground({
     //   name: "getAuth",
     //   body: {}
@@ -44,11 +54,14 @@ export default function useSettings() {
     //   }
     // })
 
-    console.log("user", user)
-    const result = { result: "success" }
-    // const result = await setDoc(doc(db, "settings", uid), values)
-    setIsLoading(false)
-    return result
+    // console.log("values", values)
+    // console.log("user", user)
+    if (user && user.uid) {
+      // const result = { result: "success" }
+      const result = await setDoc(doc(db, "settings", user.uid), values)
+      setIsLoading(false)
+    }
+    return null
   }
 
   return {
