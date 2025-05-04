@@ -1,9 +1,12 @@
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
-import React from "react"
+import React, { useState } from "react"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
+import { Button } from "~components/ui/button"
+import { Input } from "~components/ui/input"
+import { Label } from "~components/ui/label"
 import { AddMemoButton } from "~features/add-memo-button"
 
 // import { CountButton } from "~features/count-button"
@@ -42,31 +45,51 @@ export const getStyle = (): HTMLStyleElement => {
 
   return styleElement
 }
-const onClickAddButton = async () => {
-  console.log("Add Memo Button clicked!!")
-
-  if (window.getSelection && window.getSelection().type === "Range") {
-    const selectedText = window.getSelection().toString()
-    const host = window.location.host
-    console.log("string", selectedText)
-    await sendToBackground({
-      name: "saveKeyword",
-      body: {
-        host: host,
-        keyword: selectedText,
-        memo: "test memo"
-      }
-    })
-  }
-
-  // Add your logic here
-}
 
 const PlasmoOverlay = () => {
-  console.log("PlasmoOverlay loaded")
+  const [keyword, setKeyword] = useState<string | null>(null)
+  // console.log("PlasmoOverlay loaded")
+
+  const onSelectKeyword = async () => {
+    if (window.getSelection && window.getSelection().type === "Range") {
+      const selectedText = window.getSelection().toString()
+      const host = window.location.host
+      console.log("string", selectedText)
+      setKeyword(selectedText)
+    }
+  }
+
+  const onClickAddButton = async () => {
+    console.log("Add Memo Button clicked!!")
+
+    if (keyword) {
+      await sendToBackground({
+        name: "saveKeyword",
+        body: {
+          host: host,
+          keyword: selectedText,
+          memo: "test memo"
+        }
+      })
+    }
+
+    // Add your logic here
+  }
   return (
-    <div className="z-50 flex fixed top-32 right-8">
-      <AddMemoButton handler={onClickAddButton} />
+    <div className="z-50  fixed top-32 right-8 bg-white p-5 space-y-2">
+      <div>
+        <Button onClick={onSelectKeyword} type="button" size="sm">
+          선택 메모
+        </Button>
+      </div>
+      <div>
+        <Input id="width" defaultValue="100%" className="col-span-2 h-8" />
+      </div>
+      <div>
+        <Button onClick={onClickAddButton} type="button" size="sm">
+          저장
+        </Button>
+      </div>
     </div>
   )
 }
