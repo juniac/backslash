@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth/web-extension"
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import { deleteDoc, doc } from "firebase/firestore"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 
@@ -12,15 +12,13 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   if (auth && auth.currentUser) {
     try {
       const keywordData = req.body
-      console.log("host", keywordData.host)
-      console.log("keyword", keywordData.keyword)
-      console.log("memo", keywordData.memo)
+      console.log("keywordData", keywordData)
       // const storage = new Storage()
       const ref = `keywords/${auth.currentUser.uid}/${keywordData.host}/${keywordData.keyword}`
-      console.log("ref", ref)
+
       const keywordRef = doc(db, ref)
       // const result = { result: "success" }
-      const result = await setDoc(keywordRef, keywordData, { merge: true })
+      const result = await deleteDoc(keywordRef)
 
       res.send({
         status: "success",

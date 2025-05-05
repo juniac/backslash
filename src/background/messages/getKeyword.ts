@@ -1,31 +1,36 @@
 import { getAuth } from "firebase/auth/web-extension"
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc
+} from "firebase/firestore"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 
 import { db, firebase_app } from "~background"
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-  console.log("saveKeyword", req.body)
+  console.log("content.ts getKeyword", req.body)
   const auth = getAuth(firebase_app)
   // console.log("🚀 ~ auth.currentUser:", auth.currentUser)
   if (auth && auth.currentUser) {
     try {
-      const keywordData = req.body
-      console.log("host", keywordData.host)
-      console.log("keyword", keywordData.keyword)
-      console.log("memo", keywordData.memo)
-      // const storage = new Storage()
-      const ref = `keywords/${auth.currentUser.uid}/${keywordData.host}/${keywordData.keyword}`
+      const ref = `keywords/${auth.currentUser.uid}/${req.body.host}`
       console.log("ref", ref)
-      const keywordRef = doc(db, ref)
+      const keywordRef = collection(db, ref)
       // const result = { result: "success" }
-      const result = await setDoc(keywordRef, keywordData, { merge: true })
-
+      const snapshots = await getDocs(keywordRef)
+      const data = []
+      snapshots.forEach((doc) => {
+        data.push(doc.data())
+      })
       res.send({
         status: "success",
         error: null,
-        result: result
+        data: data
       })
     } catch (err) {
       console.log("There was an error")
@@ -33,11 +38,11 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
       res.send({
         status: "error",
         error: err,
-        result: null
+        data: null
       })
     }
   }
-  res.send({ status: "error", error: "No signed in user found" })
+  res.send({ status: "error", error: "No signed in user found", data: null })
 }
 
 export default handler

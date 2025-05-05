@@ -26,7 +26,7 @@ async function main() {
     name: "getSetting",
     body: {}
   })
-  console.log("🚀 ~ main ~ getSetting result:", result)
+  // console.log("🚀 ~ main ~ getSetting result:", result)
 
   const host = window.location.host
 
@@ -39,29 +39,27 @@ async function main() {
     }
     if (
       host === "soccerline.kr" &&
-      result.setting.soccerlineKeywordTrackerEnabled === true
+      result.setting.soccerlineKeywordLoggerEnabled === true
     ) {
       // console.log(pathname);
-      activateKeywordTrackerOnSoccerline()
+      const keywordResult = await sendToBackground({
+        name: "getKeyword",
+        body: {
+          host: "soccerline.kr"
+        }
+      })
+      if (
+        keywordResult &&
+        keywordResult.status === "success" &&
+        keywordResult.data.length > 0
+      ) {
+        // console.log("🚀 ~ main ~ getKeyword result:", keywordResult)
+        activateKeywordTrackerOnSoccerline(keywordResult.data)
+      }
     }
+  } else {
+    console.log("setting not loaded")
   }
-  // const search = window.location.search;
-
-  // onAuthStateChanged(auth, (user) => {
-  //   console.log("content script onAuthStateChanged user", user)
-  // })
-}
-
-const getSettings = async (user) => {
-  // const result = { result: "success" }
-  console.log("content.ts getSettings", user.uid)
-  const docSnapshot = await getDoc(doc(db, "settings", user.uid))
-  if (docSnapshot.exists()) {
-    const result = docSnapshot.data()
-    console.log("content.ts getSettings result", result)
-    return result
-  }
-  return null
 }
 
 main()
