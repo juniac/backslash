@@ -93,7 +93,7 @@ const PlasmoOverlay = () => {
         name: "saveKeyword",
         body: {
           host: window.location.host,
-          keyword,
+          keyword: keyword.trim(),
           memo: memo.trim()
         }
       })
