@@ -47,7 +47,14 @@ export const Options = ({ user }) => {
     const getFirebaseSetting = async () => {
       const result = await getSetting()
       console.log("result", result)
-      setSetting(result)
+      if (result) {
+        setSetting(result)
+      } else {
+        setSetting({
+          coupangSearchFocusHelperEnabled: true,
+          soccerlineKeywordLoggerEnabled: true
+        })
+      }
     }
     getFirebaseSetting()
   }, [])

@@ -98,3 +98,26 @@ Plasmo 확장 프로그램을 웹스토어에 배포하는 가장 쉬운 방법�
 ## 제작자
 
 - oeoe.io
+
+
+
+## Firebase firestore rules
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /channels/{document=**} {
+      allow write: if request.auth.uid != null;
+      allow read: if true;
+    }
+    match /keywords/{document=**} {
+      allow write, read: if request.auth.uid != null;
+    }
+    match /settings/{document=**} {
+      allow write, read: if request.auth.uid != null;
+    }
+  }
+}
+
+```

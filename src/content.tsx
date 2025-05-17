@@ -107,7 +107,7 @@ const PlasmoOverlay = () => {
         name: "deleteKeyword",
         body: {
           host: window.location.host,
-          keywordi
+          keyword
         }
       })
     }
