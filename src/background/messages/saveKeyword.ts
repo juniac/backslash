@@ -16,7 +16,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
       console.log("keyword", keywordData.keyword)
       console.log("memo", keywordData.memo)
       // const storage = new Storage()
-      const ref = `keywords/${auth.currentUser.uid}/${keywordData.host}/${keywordData.keyword}`
+      const ref = `keywords/${auth.currentUser.uid}/${keywordData.host}/${keywordData.userId}`
       console.log("ref", ref)
       const keywordRef = doc(db, ref)
       // const result = { result: "success" }

@@ -5,11 +5,18 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
   const pathname = window.location.pathname
   console.log("pathname", pathname)
 
-  const keywords = keywords2.map((k) => k.keyword)
+  const userIds = keywords2.map((k) => k.userId)
+  const userNicknames = keywords2.map((k) => k.nickname)
   const keywordData = keywords2.reduce((acc, k) => {
-    acc[k.keyword] = k.memo
+    acc[k.userId] = k.memo
     return acc
   }, {})
+  const nicknameData = keywords2.reduce((acc, k) => {
+    acc[k.nickname] = k.memo
+    return acc
+  }, {})
+
+  console.log("keywordData", userIds, keywordData)
 
   if (pathname.startsWith("/board")) {
     // const contentListRegex = /\/board;
@@ -23,49 +30,55 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
       nicknames.forEach((nickname) => {
         const nicknameElement = nickname as HTMLElement
 
-        if (
-          nicknameElement.textContent &&
-          keywords.includes(nicknameElement.textContent.trim())
-        ) {
-          if (_.has(keywordData, nicknameElement.textContent)) {
+        if (nicknameElement && nicknameElement.textContent) {
+          if (_.has(nicknameData, nicknameElement.textContent)) {
             showKeywordMemo(
               nicknameElement,
-              keywordData[nicknameElement.textContent as string] as string
+              nicknameData[nicknameElement.textContent as string] as string
             )
           }
         }
       })
     } else {
       console.log("content view")
-      const writerNickname = document.querySelector(
-        "#container div.writerBox > ul > li:nth-child(1) > div > a > span"
+      const writerUserIdElement = document.querySelector(
+        "#container div.writerBox > ul > li:nth-child(1) > div > span"
       )
-      if (
-        writerNickname.textContent &&
-        keywords.includes(writerNickname.textContent.trim())
-      ) {
-        if (_.has(keywordData, writerNickname.textContent)) {
+
+      if (writerUserIdElement && writerUserIdElement.textContent) {
+        const writerUserId = writerUserIdElement.textContent
+          .trim()
+          .replace(/[()]/g, "")
+        // userIds.includes(writerUserId.textContent.trim())
+        // console.log("writerUserId", writerUserId)
+        if (_.has(keywordData, writerUserId)) {
           showKeywordMemo(
-            writerNickname,
-            keywordData[writerNickname.textContent as string] as string
+            writerUserIdElement as HTMLElement,
+            keywordData[writerUserId] as string
           )
         }
       }
-      const nicknames = document.querySelectorAll(
+      const commentWriters = document.querySelectorAll(
         "#board-view-comment-list h2.userId a.btnUser"
       )
-      nicknames.forEach((nickname) => {
-        const nicknameElement = nickname as HTMLElement
-        const fullname = nicknameElement.textContent
-        const realname = fullname?.split("(")[0]
-        console.log("realname", realname)
-        if (realname && keywords.includes(realname.trim())) {
-          if (_.has(keywordData, realname.trim())) {
-            showKeywordMemo(
-              nicknameElement,
-              keywordData[realname as string] as string
-            )
-          }
+      commentWriters.forEach((commentWriter) => {
+        const commentWriterElement = commentWriter as HTMLElement
+        // console.log("commentwriter", commentWriter.textContent)
+        const [, writerNickname, writerUserId] = commentWriter.textContent
+          .trim()
+          .match(/^(.+?)\(([^,]+),.*?\)$/)
+        // console.log("writerNickname", writerNickname)
+        // console.log("writerUserId", writerUserId)
+        if (_.has(keywordData, writerUserId)) {
+          console.log(
+            "writerUserId",
+            writerUserId,
+            keywordData[writerUserId] as string
+          )
+          showKeywordMemo(
+            commentWriterElement,
+            keywordData[writerUserId] as string
+          )
         }
       })
     }
@@ -81,6 +94,7 @@ export function showKeywordMemo(element: HTMLElement, description: string) {
   nicknameWrapper.style.width = "100%"
   // memo.style.top = '100%';
   // memo.style.left = '100%';
+  console.log("description", description)
   memo.style.fontSize = "0.7em"
   memo.style.backgroundColor = "#fff094"
   memo.style.padding = "2px"

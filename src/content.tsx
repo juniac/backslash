@@ -84,16 +84,52 @@ const PlasmoOverlay = () => {
     }
   }
 
+  function extractKeyword(keyword: string) {
+    const trimmedKeyword = keyword.trim()
+    // 닉네임(userid) 형태를 매칭하는 정규표현식
+    const nicknameUseridPattern = /^(.+?)\((.+?)\)$/
+    // 괄호 안에 쉼표가 있으면 쉼표 앞까지만 추출
+    const commaInParenthesesPattern = /^(.+?)\(([^,]+),.*?\)$/
+    const commaMatch = trimmedKeyword.match(commaInParenthesesPattern)
+
+    if (commaMatch) {
+      const [, nickname, userid] = commaMatch
+      return {
+        name: nickname.trim(),
+        id: userid.trim()
+      }
+    }
+    const match = trimmedKeyword.match(nicknameUseridPattern)
+
+    if (match) {
+      const [, nickname, userid] = match
+      return {
+        name: nickname.trim(),
+        id: userid.trim()
+      }
+    }
+
+    // 매칭되지 않으면 전체를 닉네임으로 처리
+    return {
+      name: trimmedKeyword,
+      id: null
+    }
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSaving(true)
     const { memo } = values
     console.log("🚀 ~ onSubmit ~ memo:", memo)
+    // console.log("🚀 ~ onSubmit ~ keyword:", keyword)
+
     if (keyword && keyword.length > 0 && memo.length > 0) {
+      const extractedKeyword = extractKeyword(keyword)
       await sendToBackground({
         name: "saveKeyword",
         body: {
           host: window.location.host,
-          keyword: keyword.trim(),
+          userId: extractedKeyword.id,
+          nickname: extractedKeyword.name,
           memo: memo.trim()
         }
       })
@@ -103,11 +139,14 @@ const PlasmoOverlay = () => {
 
   const deleteKeyword = async () => {
     if (keyword && keyword.length > 0) {
+      const extractedKeyword = extractKeyword(keyword)
       await sendToBackground({
         name: "deleteKeyword",
         body: {
           host: window.location.host,
-          keyword
+          userId: extractedKeyword.id,
+          nickname: extractedKeyword.name,
+          memo: ""
         }
       })
     }
@@ -120,7 +159,7 @@ const PlasmoOverlay = () => {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="mb-2">
             <Button onClick={onSelectKeyword} type="button" size="sm">
-              선택 메모
+              유저 선택
             </Button>
           </div>
           {keyword ? (
