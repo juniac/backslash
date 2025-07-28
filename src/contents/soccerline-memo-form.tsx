@@ -1,10 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod"
+// import { zodResolver } from "@hookform/resolvers/zod"
 import cssText from "data-text:~style.css"
 import { LoaderCircle, UserRoundPlus } from "lucide-react"
 import type { PlasmoCSConfig } from "plasmo"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+
+// import { z } from "zod"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
@@ -18,14 +19,16 @@ import {
   FormMessage
 } from "~components/ui/form"
 import { Input } from "~components/ui/input"
-import { Label } from "~components/ui/label"
-import { AddMemoButton } from "~features/add-memo-button"
+
+// import { Label } from "~components/ui/label"
+// import { AddMemoButton } from "~features/add-memo-button"
 
 // import { CountButton } from "~features/count-button"
 
 export const config: PlasmoCSConfig = {
-  // matches: ["<all_urls>"]
-  matches: ["https://soccerline.kr/*"]
+  // matches: ["<all_urls>"],
+  matches: ["https://soccerline.kr/*"],
+  all_frames: true
 }
 
 /**
@@ -58,18 +61,18 @@ export const getStyle = (): HTMLStyleElement => {
   return styleElement
 }
 
-const formSchema = z.object({
-  memo: z.string()
-})
+// const formSchema = z.object({
+//   memo: z.string()
+// })
 
-type MemoFormType = z.infer<typeof formSchema>
+// type MemoFormType = z.infer<typeof formSchema>
 
 const PlasmoOverlay = () => {
   console.log("PlasmoOverlay content.tsx!!!!!")
   const [keyword, setKeyword] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  const form = useForm<MemoFormType>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       memo: ""
     }
@@ -116,7 +119,7 @@ const PlasmoOverlay = () => {
     }
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: any) {
     setIsSaving(true)
     const { memo } = values
     console.log("🚀 ~ onSubmit ~ memo:", memo)
@@ -218,3 +221,10 @@ const PlasmoOverlay = () => {
 }
 
 export default PlasmoOverlay
+
+// const CustomButton = () => {
+//   console.log("CustomButton content.tsx!!!!!")
+//   return <button>Custom button</button>
+// }
+
+// export default CustomButton

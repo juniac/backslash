@@ -58,7 +58,7 @@ async function main() {
       }
     }
   } else {
-    console.log("setting not loaded")
+    // console.log("setting not loaded")
   }
 }
 

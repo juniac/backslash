@@ -4,7 +4,8 @@ import { LoaderCircle, UserRoundPlus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
-import { z } from "zod"
+
+// import { z } from "zod"
 
 import { PasswordInput } from "~components/auth/password-input"
 import { Button, buttonVariants } from "~components/ui/button"
@@ -27,18 +28,18 @@ import useSetting from "~firebase/useSetting"
 import { cn } from "~lib/utils"
 import { useSettingStore } from "~store/settings"
 
-const formSchema = z.object({
-  coupangSearchFocusHelperEnabled: z.boolean(),
-  soccerlineKeywordLoggerEnabled: z.boolean()
-})
+// const formSchema = z.object({
+//   coupangSearchFocusHelperEnabled: z.boolean(),
+//   soccerlineKeywordLoggerEnabled: z.boolean()
+// })
 
-type SettingsFormType = z.infer<typeof formSchema>
+// type SettingsFormType = z.infer<typeof formSchema>
 
 export const Options = ({ user }) => {
   const navigate = useNavigate()
   const { isLoading, updateSetting, getSetting } = useSetting()
   const [isUpdating, setIsUpdating] = useState<boolean>(false)
-  const [setting, setSetting] = useState<SettingsFormType>({
+  const [setting, setSetting] = useState({
     coupangSearchFocusHelperEnabled: true,
     soccerlineKeywordLoggerEnabled: true
   })
@@ -59,8 +60,8 @@ export const Options = ({ user }) => {
     getFirebaseSetting()
   }, [])
 
-  const form = useForm<SettingsFormType>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       coupangSearchFocusHelperEnabled: true,
       soccerlineKeywordLoggerEnabled: true
@@ -72,7 +73,7 @@ export const Options = ({ user }) => {
     }
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: any) {
     setIsUpdating(true)
     const { coupangSearchFocusHelperEnabled, soccerlineKeywordLoggerEnabled } =
       values

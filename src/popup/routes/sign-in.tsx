@@ -4,7 +4,8 @@ import { LoaderCircle, UserRoundPlus } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
-import { z } from "zod"
+
+// import { z } from "zod"
 
 import { PasswordInput } from "~components/auth/password-input"
 import { Button, buttonVariants } from "~components/ui/button"
@@ -24,30 +25,30 @@ import useFirebaseUser from "~firebase/useFirebaseUser"
 import { cn } from "~lib/utils"
 import { AuthLayout } from "~popup/layouts/auth-layout"
 
-const formSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "이메일 입력은 필수입니다." })
-    .email({ message: "잘못된 이메일 주소" }),
-  password: z.string().min(6, { message: "비밀번호는 최소 6자 이상입니다." })
-})
+// const formSchema = z.object({
+//   email: z
+//     .string()
+//     .min(1, { message: "이메일 입력은 필수입니다." })
+//     .email({ message: "잘못된 이메일 주소" }),
+//   password: z.string().min(6, { message: "비밀번호는 최소 6자 이상입니다." })
+// })
 
-type signUpFormType = z.infer<typeof formSchema>
+// type signUpFormType = z.infer<typeof formSchema>
 
 export const SignIn = () => {
   const navigate = useNavigate()
   const { isLoading, loginAction } = useFirebaseUser()
   const [isSigningIn, setIsSigningIn] = useState<boolean>(false)
 
-  const form = useForm<signUpFormType>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       email: "juniac@naver.com",
       password: ""
     }
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: any) {
     setIsSigningIn(true)
     const { email, password } = values
 

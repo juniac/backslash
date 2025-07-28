@@ -1,9 +1,9 @@
 import _ from "lodash"
 
 export function activateKeywordTrackerOnSoccerline(keywords2) {
-  console.log("activateKeywordTrackerOnSoccerline", keywords2)
+  // console.log("activateKeywordTrackerOnSoccerline", keywords2)
   const pathname = window.location.pathname
-  console.log("pathname", pathname)
+  // console.log("pathname", pathname)
 
   const userIds = keywords2.map((k) => k.userId)
   const userNicknames = keywords2.map((k) => k.nickname)
@@ -16,14 +16,14 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
     return acc
   }, {})
 
-  console.log("keywordData", userIds, keywordData)
+  // console.log("keywordData", userIds, keywordData)
 
   if (pathname.startsWith("/board")) {
     // const contentListRegex = /\/board;
     // const contentViewRegex = /\/board\/contentView/;
 
     if (pathname.endsWith("/board")) {
-      console.log("content list")
+      // console.log("content list")
       const nicknames = document.querySelectorAll(
         "#boardListContainer table tr td:nth-child(3)"
       )
@@ -40,7 +40,7 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
         }
       })
     } else {
-      console.log("content view")
+      // console.log("content view")
       const writerUserIdElement = document.querySelector(
         "#container div.writerBox > ul > li:nth-child(1) > div > span"
       )
@@ -70,11 +70,11 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
         // console.log("writerNickname", writerNickname)
         // console.log("writerUserId", writerUserId)
         if (_.has(keywordData, writerUserId)) {
-          console.log(
-            "writerUserId",
-            writerUserId,
-            keywordData[writerUserId] as string
-          )
+          // console.log(
+          //   "writerUserId",
+          //   writerUserId,
+          //   keywordData[writerUserId] as string
+          // )
           showKeywordMemo(
             commentWriterElement,
             keywordData[writerUserId] as string
@@ -94,8 +94,9 @@ export function showKeywordMemo(element: HTMLElement, description: string) {
   nicknameWrapper.style.width = "100%"
   // memo.style.top = '100%';
   // memo.style.left = '100%';
-  console.log("description", description)
+  // console.log("description", description)
   memo.style.fontSize = "0.7em"
+  memo.style.fontWeight = "light"
   memo.style.backgroundColor = "#fff094"
   memo.style.padding = "2px"
   memo.style.marginLeft = "3px" // memo.style.height = '10px';
