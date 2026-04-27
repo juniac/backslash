@@ -27,14 +27,15 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
         error: null,
         result: result
       })
+      return
     } catch (err) {
-      console.log("There was an error")
       console.error(err)
       res.send({
         status: "error",
         error: err,
         result: null
       })
+      return
     }
   }
   res.send({ status: "error", error: "No signed in user found" })

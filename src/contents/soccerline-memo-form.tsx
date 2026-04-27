@@ -78,11 +78,10 @@ const PlasmoOverlay = () => {
     }
   })
 
-  const onSelectKeyword = async () => {
+  const onSelectKeyword = (e: React.MouseEvent) => {
+    e.preventDefault()
     if (window.getSelection && window.getSelection().type === "Range") {
       const selectedText = window.getSelection().toString()
-
-      console.log("string", selectedText)
       setKeyword(selectedText)
     }
   }
@@ -161,7 +160,7 @@ const PlasmoOverlay = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="mb-2">
-            <Button onClick={onSelectKeyword} type="button" size="sm">
+            <Button onMouseDown={onSelectKeyword} type="button" size="sm">
               유저 선택
             </Button>
           </div>
