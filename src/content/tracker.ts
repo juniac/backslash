@@ -19,28 +19,37 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
   // console.log("keywordData", userIds, keywordData)
 
   if (pathname.startsWith("/board")) {
-    // const contentListRegex = /\/board;
-    // const contentViewRegex = /\/board\/contentView/;
-
-    if (pathname.endsWith("/board")) {
-      // console.log("content list")
-      const nicknames = document.querySelectorAll(
-        "#boardListContainer table tr td:nth-child(3)"
-      )
-      nicknames.forEach((nickname) => {
-        const nicknameElement = nickname as HTMLElement
-
-        if (nicknameElement && nicknameElement.textContent) {
-          if (_.has(nicknameData, nicknameElement.textContent)) {
-            showKeywordMemo(
-              nicknameElement,
-              nicknameData[nicknameElement.textContent as string] as string
-            )
+    if (pathname === "/board") {
+      const applyMemos = () => {
+        const nicknames = document.querySelectorAll(
+          "#boardListContainer table tr td:nth-child(3)"
+        )
+        nicknames.forEach((nickname) => {
+          const nicknameElement = nickname as HTMLElement
+          if (nicknameElement && nicknameElement.textContent) {
+            if (_.has(nicknameData, nicknameElement.textContent)) {
+              showKeywordMemo(
+                nicknameElement,
+                nicknameData[nicknameElement.textContent as string] as string
+              )
+            }
           }
-        }
-      })
+        })
+      }
+
+      const container = document.querySelector("#boardListContainer")
+      if (container) {
+        applyMemos()
+      } else {
+        const observer = new MutationObserver(() => {
+          if (document.querySelector("#boardListContainer")) {
+            observer.disconnect()
+            applyMemos()
+          }
+        })
+        observer.observe(document.body, { childList: true, subtree: true })
+      }
     } else {
-      // console.log("content view")
       const writerUserIdElement = document.querySelector(
         "#container div.writerBox > ul > li:nth-child(1) > div > span"
       )
@@ -49,8 +58,6 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
         const writerUserId = writerUserIdElement.textContent
           .trim()
           .replace(/[()]/g, "")
-        // userIds.includes(writerUserId.textContent.trim())
-        // console.log("writerUserId", writerUserId)
         if (_.has(keywordData, writerUserId)) {
           showKeywordMemo(
             writerUserIdElement as HTMLElement,
@@ -58,29 +65,39 @@ export function activateKeywordTrackerOnSoccerline(keywords2) {
           )
         }
       }
-      const commentWriters = document.querySelectorAll(
-        "#board-view-comment-list h2.userId a.btnUser"
-      )
-      commentWriters.forEach((commentWriter) => {
-        const commentWriterElement = commentWriter as HTMLElement
-        // console.log("commentwriter", commentWriter.textContent)
-        const [, writerNickname, writerUserId] = commentWriter.textContent
-          .trim()
-          .match(/^(.+?)\(([^,]+),.*?\)$/)
-        // console.log("writerNickname", writerNickname)
-        // console.log("writerUserId", writerUserId)
-        if (_.has(keywordData, writerUserId)) {
-          // console.log(
-          //   "writerUserId",
-          //   writerUserId,
-          //   keywordData[writerUserId] as string
-          // )
-          showKeywordMemo(
-            commentWriterElement,
-            keywordData[writerUserId] as string
-          )
-        }
-      })
+
+      const applyCommentMemos = () => {
+        const commentWriters = document.querySelectorAll(
+          "#board-view-comment-list span.btnUser"
+        )
+        commentWriters.forEach((commentWriter) => {
+          const commentWriterElement = commentWriter as HTMLElement
+          const match = commentWriter.textContent
+            .trim()
+            .match(/^(.+?)\(([^,]+),.*?\)$/)
+          if (!match) return
+          const writerUserId = match[2]
+          if (_.has(keywordData, writerUserId)) {
+            showKeywordMemo(
+              commentWriterElement,
+              keywordData[writerUserId] as string
+            )
+          }
+        })
+      }
+
+      const commentList = document.querySelector("#board-view-comment-list")
+      if (commentList) {
+        applyCommentMemos()
+      } else {
+        const observer = new MutationObserver(() => {
+          if (document.querySelector("#board-view-comment-list")) {
+            observer.disconnect()
+            applyCommentMemos()
+          }
+        })
+        observer.observe(document.body, { childList: true, subtree: true })
+      }
     }
   }
 }
